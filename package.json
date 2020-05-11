@@ -1,0 +1,24 @@
+{
+  "name": "geeker-cli",
+  "version": "1.0.0",
+  "description": "geeker cli",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jonathan143",
+  "license": "ISC",
+  "bin": {
+    "geeker": "bin/geeker.js",
+    "geeker-add": "bin/geeker-add.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jonathan143/geeker-cli.git"
+  },
+  "devDependencies": {
+    "chalk": "^4.0.0",
+    "commander": "^5.1.0",
+    "inquirer": "^7.1.0",
+    "ora": "^4.0.4"
+  }
+}
