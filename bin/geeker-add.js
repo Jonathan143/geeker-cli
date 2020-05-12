@@ -1,9 +1,10 @@
-#!/usr/bin/env node
+#! /usr/bin/env node
 
 // 交互式命令行
 const inquirer = require('inquirer')
 // 修改控制台字符串样式
 const chalk = require('chalk')
+const ora = require('ora')
 
 // 读取根目录下的 template.json
 const tplObj = require(`${__dirname}/../template`)
@@ -30,5 +31,10 @@ const question = [
 ]
 
 inquirer.prompt(question).then(({ name, url }) => {
-  console.log(chalk.green(name + `: ` + url))
+  const loading = ora('downloading template ...')
+  loading.start()
+  setTimeout(() => {
+    loading.succeed()
+    console.log(chalk.green(name + `: ` + url))
+  }, 2000)
 })

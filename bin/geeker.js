@@ -1,9 +1,10 @@
-#!/usr/bin/env node
+#! /usr/bin/env node
 const program = require('commander')
 
 // 定义当前版本
 // 定义使用方法
 // 定义四个指令
+// action – 注册一个callback函数,这里需注意目前回调不支持let声明变量
 program
   .version(require('../package.json').version)
   .usage('<command> [options]')
