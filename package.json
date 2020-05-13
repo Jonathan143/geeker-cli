@@ -9,7 +9,7 @@
   "license": "ISC",
   "bin": {
     "geeker": "bin/geeker.js",
-    "geeker-add": "bin/geeker-add.js",
+    "geeker-init": "bin/geeker-init.js",
     "geeker-bing": "bin/geeker-bing.js",
     "geeker-mz": "bin/geeker-mz.js"
   },
@@ -26,6 +26,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "cheerio": "^1.0.0-rc.3",
-    "moment": "^2.25.3"
+    "moment": "^2.25.3",
+    "qs": "^6.9.4"
   }
 }
