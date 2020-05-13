@@ -9,7 +9,9 @@
   "license": "ISC",
   "bin": {
     "geeker": "bin/geeker.js",
-    "geeker-add": "bin/geeker-add.js"
+    "geeker-add": "bin/geeker-add.js",
+    "geeker-bing": "bin/geeker-bing.js",
+    "geeker-mz": "bin/geeker-mz.js"
   },
   "repository": {
     "type": "git",
@@ -20,5 +22,10 @@
     "commander": "^5.1.0",
     "inquirer": "^7.1.0",
     "ora": "^4.0.4"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "cheerio": "^1.0.0-rc.3",
+    "moment": "^2.25.3"
   }
 }
