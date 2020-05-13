@@ -9,8 +9,8 @@ program
   .version(require('../package.json').version)
   .usage('<command> [options]')
   .command('add', 'add a new template')
-  .command('delete', 'delete a template')
-  .command('list', 'list all templates')
+  .command('bing', '爬取每日bing壁纸')
+  .command('mz', '爬取妹子图')
   .command('init', 'gengrate a new project from a template')
   .parse(process.argv)
 
