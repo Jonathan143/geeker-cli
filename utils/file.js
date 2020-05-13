@@ -47,8 +47,8 @@ const saveFileSync = async ({
  */
 const saveNetworkFileSync = async (url, config, isSaveLocal = true) => {
   try {
-    const loading = ora(`downloading ${url}`)
-    loading.start()
+    const loading = ora(`downloading ${url}`).start()
+
     const stream = await $request({
       api: url,
       config: {
