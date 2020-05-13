@@ -10,10 +10,14 @@ const fsp = fs.promises
 const cheerio = require('cheerio')
 const moment = require('moment')
 const $request = require('../utils/api')
-const { saveNetworkFileSync } = require('../utils/file')
+const { checkInit } = require('../utils/geeker')
+
+const dbBingPath = './geeker_db/bing.json'
 
 class GeekerBing {
   constructor() {
+    if (!checkInit()) return
+
     this.question = [
       {
         name: 'action',
@@ -36,8 +40,7 @@ class GeekerBing {
   }
 
   async getTodayBing() {
-    const loading = ora('正在获取中...')
-    loading.start()
+    const loading = ora('正在获取中...').start()
     try {
       const data = await $request({
         api: 'http://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1',
@@ -45,27 +48,28 @@ class GeekerBing {
       const { url, enddate, startdate, copyright } = data.images[0]
       const bingUrl = `https://cn.bing.com/${url}`
       loading.succeed('获取成功')
-      return {
+      const result = {
         url: bingUrl,
         enddate,
         startdate,
         title: copyright,
       }
+      console.log(result)
+      return result
     } catch (error) {
       loading.fail('获取失败')
     }
   }
 
   async downloadAllBing() {
-    const loading = ora('正在获取中...')
-    loading.start()
+    const loading = ora('正在获取中...').start()
     try {
       const data = await $request({
         api: 'https://bing.ioliu.cn/',
         param: { p: 1 || '' },
       })
 
-      const list = []
+      let list = []
       const $ = cheerio.load(data) //将html转换为可操作的节点
       $('.container .item .card').each(async (i, e) => {
         const enddate = e.children[2].children[1].children[1].children[0].data
@@ -84,17 +88,26 @@ class GeekerBing {
       })
 
       loading.succeed('获取成功')
+      let historyData = []
+
+      if (fs.existsSync(dbBingPath)) {
+        historyData = JSON.parse(await fsp.readFile(dbBingPath)) || []
+      }
+      await fsp.writeFile(
+        dbBingPath,
+        JSON.stringify([...historyData, ...list], null, 2)
+      )
       return list
     } catch (error) {
       loading.fail('获取失败')
+      console.log(error)
     }
   }
 
   async main() {
     try {
       const { action } = await inquirer.prompt(this.question)
-      const result = await this[this.actionMethods[action]]()
-      console.log(result)
+      await this[this.actionMethods[action]]()
     } catch (error) {
       console.log(error)
     }
