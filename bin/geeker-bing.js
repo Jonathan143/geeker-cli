@@ -12,7 +12,7 @@ const moment = require('moment')
 const $request = require('../utils/api')
 const UtilsGeeker = require('../utils/geeker')
 const utilsGeeker = new UtilsGeeker()
-const { mkdirsSync } = require('../utils/file')
+const { mkdirsSync, saveNetworkFileSync } = require('../utils/file')
 
 const UtilsDb = require('../utils/db')
 const utilsDb = new UtilsDb()
@@ -21,6 +21,7 @@ class GeekerBing {
   constructor() {
     if (!utilsGeeker.checkInit()) return
 
+    this.isSaveLocal = false
     this.BingDbDirPath = ''
     this.question = [
       {
@@ -67,7 +68,7 @@ class GeekerBing {
 
   async inquirerDownloadAll() {
     let startIndex = 1
-    const { endIndex } = await inquirer.prompt([
+    const { endIndex, isSaveLocal } = await inquirer.prompt([
       {
         name: 'startIndex',
         type: 'input',
@@ -89,8 +90,14 @@ class GeekerBing {
             : '必须输入数字并且大于等于开始页码'
         },
       },
+      {
+        name: 'isSaveLocal',
+        type: 'confirm',
+        message: '是否保存图片至本地',
+      },
     ])
 
+    this.isSaveLocal = isSaveLocal
     const list = []
     while (endIndex - startIndex >= 0) {
       list.push(startIndex)
@@ -153,6 +160,13 @@ class GeekerBing {
       for (const item of endDateMap[date]) {
         if (!endDateList.includes(item.enddate)) {
           historyData.push(item)
+          if (this.isSaveLocal) {
+            await saveNetworkFileSync(
+              item.url,
+              { path: `bing/${date}`, fileName: item.title + '.jpg' },
+              this.isSaveLocal
+            )
+          }
         }
       }
       await utilsDb.setDb(dbPath, historyData)

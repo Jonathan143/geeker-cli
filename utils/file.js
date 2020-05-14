@@ -33,7 +33,9 @@ const saveFileSync = async ({
     const dirPath = basePath + path
     console.log(`saveFileSync 保存地址 -- ${dirPath}`)
     await mkdirsSync(dirPath)
-    const writeStream = fs.createWriteStream(`${dirPath}/${fileName}`)
+    const writeStream = fs.createWriteStream(
+      `${dirPath}/${fileName.replace(/\//g, '-')}`
+    )
     await stream.pipe(writeStream)
   } else {
     console.error('stream||fileName undefinded')
