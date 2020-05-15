@@ -31,7 +31,6 @@ const saveFileSync = async ({
   if (stream && fileName) {
     // 若无目录，创建目录
     const dirPath = basePath + path
-    console.log(`saveFileSync 保存地址 -- ${dirPath}`)
     await mkdirsSync(dirPath)
     const writeStream = fs.createWriteStream(
       `${dirPath}/${fileName.replace(/\//g, '-')}`
