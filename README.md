@@ -1,5 +1,26 @@
 # geeker-cli
 
+## Install
+
+```js
+npm i -g geeker-cli
+# OR
+yarn global add geeker-cli
+```
+
+## Usage
+
+```js
+// 初始化项目
+geeker init
+
+// 爬取每日bing壁纸
+geeker bing
+
+// 爬取妹子图
+geeker mzitu
+```
+
 ## Git 规范
 
 使用 [commitlint](https://github.com/conventional-changelog/commitlint) 工具，常用有以下几种类型：
@@ -17,3 +38,7 @@
 举例
 
 `git commit -m 'feat: add list'`
+
+## License
+
+[MIT](https://github.com/vuejs/vue-cli/blob/dev/LICENSE)
