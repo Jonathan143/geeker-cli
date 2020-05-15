@@ -1,6 +1,7 @@
 const fs = require('fs')
 const fsp = fs.promises
 const _cloneDeep = require('lodash/cloneDeep')
+const _sortBy = require('lodash/sortBy')
 
 class UtilsDb {
   constructor() {}
@@ -27,8 +28,11 @@ class UtilsDb {
     return historyData
   }
 
-  async setDb(dbPath, db) {
+  async setDb(dbPath, db, sortBy) {
     try {
+      if (sortBy && typeof sortBy === 'function') {
+        db = _sortBy(db, sortBy)
+      }
       await fsp.writeFile(dbPath, JSON.stringify(db, null, 2))
     } catch (error) {
       console.log(error)

@@ -27,7 +27,7 @@ class GeekerBing {
       {
         name: 'action',
         type: 'list',
-        message: '请选择操作',
+        message: '请选择操作:',
         choices: [
           { name: '今日bing', value: 'todayBing' },
           { name: '批量下载到本地', value: 'downloadAll' },
@@ -72,7 +72,7 @@ class GeekerBing {
       {
         name: 'startIndex',
         type: 'input',
-        message: '请输入开始页码',
+        message: '请输入开始页码:',
         validate: (input) => {
           startIndex = parseInt(input)
           return /^\d+$/.test(input) && input > 0
@@ -83,7 +83,7 @@ class GeekerBing {
       {
         name: 'endIndex',
         type: 'input',
-        message: '请输入结束页码',
+        message: '请输入结束页码:',
         validate: (input) => {
           return /^\d+$/.test(input) && parseInt(input) >= startIndex
             ? true
@@ -93,7 +93,7 @@ class GeekerBing {
       {
         name: 'isSaveLocal',
         type: 'confirm',
-        message: '是否保存图片至本地',
+        message: '是否保存图片至本地:',
       },
     ])
 
@@ -169,7 +169,7 @@ class GeekerBing {
           }
         }
       }
-      await utilsDb.setDb(dbPath, historyData)
+      await utilsDb.setDb(dbPath, historyData, (i) => i.enddate)
     }
   }
 
