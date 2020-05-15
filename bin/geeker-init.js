@@ -8,7 +8,11 @@ const { mkdirsSync } = require('../utils/file')
 
 class GeekerInit {
   constructor() {
-    this.config = { name, version, dbDirPath: { bing: './geeker_db/bing/' } }
+    this.config = {
+      name,
+      version,
+      dbDirPath: { bing: './geeker_db/bing/', mzitu: './geeker_db/mzitu/' },
+    }
     this.init()
   }
 

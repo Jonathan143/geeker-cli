@@ -11,7 +11,7 @@
     "geeker": "bin/geeker.js",
     "geeker-init": "bin/geeker-init.js",
     "geeker-bing": "bin/geeker-bing.js",
-    "geeker-mz": "bin/geeker-mz.js"
+    "geeker-mzitu": "bin/geeker-mzitu.js"
   },
   "repository": {
     "type": "git",

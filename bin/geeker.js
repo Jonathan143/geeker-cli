@@ -8,10 +8,9 @@ const program = require('commander')
 program
   .version(require('../package.json').version)
   .usage('<command> [options]')
-  .command('add', 'add a new template')
+  .command('init', '初始化项目')
   .command('bing', '爬取每日bing壁纸')
-  .command('mz', '爬取妹子图')
-  .command('init', 'gengrate a new project from a template')
+  .command('mzitu', '爬取妹子图')
   .parse(process.argv)
 
 // 当 command 没有描述参数，且 parse 方法使用链式调用会报错!!! （猜想：command 有 desc 参数时，返回的是 this，当没有 desc 参数时，返回的是新对象，根据 API Document 得出）
