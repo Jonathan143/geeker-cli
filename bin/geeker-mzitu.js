@@ -123,9 +123,7 @@ class GeekerMZ {
         for (const urls of oneSet.srcList) {
           const fileName = urls.imageUrl.match('[^/]+(?!.*/)')[0]
           try {
-            console.log(111)
             const stream = await this.requestDownload(urls)
-            console.log(222)
 
             await saveFileSync({
               stream,
