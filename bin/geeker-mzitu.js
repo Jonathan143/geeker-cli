@@ -19,6 +19,9 @@ const utilsDb = new UtilsDb()
 
 class GeekerMZ {
   constructor() {
+    if (!utilsGeeker.checkInit()) return
+
+    this.queue = require('fastq')(this, this.worker, 2)
     this.question = [
       {
         type: 'list',
@@ -117,26 +120,10 @@ class GeekerMZ {
         let loading = ora(`开始获取套图 -- ${title}`).start()
         const oneSet = await this.getAllPicUrl(sourceUrl)
         loading.succeed(`套图获取成功 -- ${title}`)
-        loading = loading
-          .render()
-          .start(`开始下载套图共${oneSet.total}张 -- ${title}`)
+        loading.render().info(`开始下载套图共${oneSet.total}张 -- ${title}`)
         for (const urls of oneSet.srcList) {
-          const fileName = urls.imageUrl.match('[^/]+(?!.*/)')[0]
-          try {
-            const stream = await this.requestDownload(urls)
-
-            await saveFileSync({
-              stream,
-              path: `/mzitu/${moment(date).format('YYYY-MM')}/${title}`,
-              fileName,
-            })
-          } catch (error) {
-            console.log(chalk.red(`\n ${fileName} 保存失败`))
-          }
+          this.queue.push({ urls, date, title })
         }
-        loading.succeed(`套图下载成功共${oneSet.total}张 -- ${title}`)
-
-        await this.justSleep(2000)
       }
     } catch (error) {
       console.log(error)
@@ -249,11 +236,31 @@ class GeekerMZ {
       : `/page/${pageIndex}/`
   }
 
+  async worker({ urls, date, title }, done) {
+    let error = null
+    const fileName = urls.imageUrl.match('[^/]+(?!.*/)')[0]
+    try {
+      const stream = await this.requestDownload(urls)
+
+      await saveFileSync({
+        stream,
+        path: `/mzitu/${moment(date).format('YYYY-MM')}/${title}`,
+        fileName,
+      })
+      console.log(`${title} - ${fileName} 下载完成`)
+      await this.justSleep(500)
+    } catch (err) {
+      error = err
+      console.log(chalk.red(`\n ${fileName} 保存失败`))
+    }
+    done(error, 'successd')
+  }
+
   justSleep(timeout) {
     return new Promise((resolve, reject) => {
       const sleep = ora(`开始休眠 ${timeout / 1000}s`).start()
       setTimeout(() => {
-        sleep.info('停止休眠')
+        sleep.succeed('停止休眠')
         resolve()
       }, timeout)
     })

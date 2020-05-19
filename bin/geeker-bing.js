@@ -21,6 +21,7 @@ class GeekerBing {
   constructor() {
     if (!utilsGeeker.checkInit()) return
 
+    this.queue = require('fastq')(this, this.worker, 2)
     this.isSaveLocal = false
     this.BingDbDirPath = ''
     this.question = [
@@ -161,16 +162,29 @@ class GeekerBing {
         if (!endDateList.includes(item.enddate)) {
           historyData.push(item)
           if (this.isSaveLocal) {
-            await saveNetworkFileSync(
-              item.url,
-              { path: `bing/${date}`, fileName: item.title + '.jpg' },
-              this.isSaveLocal
-            )
+            const data = {
+              url: item.url,
+              config: { path: `bing/${date}`, fileName: item.title + '.jpg' },
+              is: this.isSaveLocal,
+            }
+            this.queue.push(data)
           }
         }
       }
       await utilsDb.setDb(dbPath, historyData, (i) => i.enddate)
     }
+  }
+
+  async worker(data, done) {
+    let err = null
+    let result = ''
+    try {
+      const { url, config, is } = data
+      result = await saveNetworkFileSync(url, config, is)
+    } catch (error) {
+      err = error
+    }
+    done(err, result)
   }
 
   async main() {
