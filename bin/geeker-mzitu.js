@@ -52,6 +52,7 @@ class GeekerMZ {
     ]
     this.MzituDbDirPath = ''
     this.mzBaseUrl = 'https://www.mzitu.com'
+    this.count = 0
 
     this.main()
   }
@@ -248,7 +249,10 @@ class GeekerMZ {
         fileName,
       })
       console.log(`${title} - ${fileName} 下载完成`)
-      await this.justSleep(500)
+      this.count++
+
+      const isLog = this.count % 25
+      await this.justSleep(isLog ? 0.3 : 30, !isLog)
     } catch (err) {
       error = err
       console.log(chalk.red(`\n ${fileName} 保存失败`))
@@ -256,13 +260,16 @@ class GeekerMZ {
     done(error, 'successd')
   }
 
-  justSleep(timeout) {
+  justSleep(timeout, isLog) {
     return new Promise((resolve, reject) => {
-      const sleep = ora(`开始休眠 ${timeout / 1000}s`).start()
+      let sleep = null
+      if (isLog) {
+        sleep = ora(`开始休眠 ${timeout}s\n`).start()
+      }
       setTimeout(() => {
-        sleep.succeed('停止休眠')
+        sleep && sleep.succeed('停止休眠')
         resolve()
-      }, timeout)
+      }, timeout * 1000)
     })
   }
 

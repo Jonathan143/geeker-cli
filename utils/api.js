@@ -14,31 +14,31 @@ const instance = axios.create({
   withCredentials: true,
   headers: {
     post: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
-  }
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  },
 })
 
 // dispose request parameters
 const disposeParam = (method, param) => {
   switch (method) {
     case 'get':
-      return {params: param}
+      return { params: param }
     case 'post':
-      return {data: qs.stringify(param)}
+      return { data: qs.stringify(param) }
   }
   return param
 }
 
-module.exports = ({method = 'get', api, param = {}, config = {}}) => {
+module.exports = ({ method = 'get', api, param = {}, config = {} }) => {
   const mParam = disposeParam(method, param)
 
-  Object.assign(config, {url: api, method}, mParam)
+  Object.assign(config, { url: api, method }, mParam)
   return instance(config)
-    .then(data => {
+    .then((data) => {
       return Promise.resolve(data.data)
     })
-    .catch(error => {
+    .catch((error) => {
       return Promise.reject(error.message)
     })
 }
